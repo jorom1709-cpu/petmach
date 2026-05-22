@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pet Mach - Donaciones</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* Estilos específicos para la tarjeta de donación */
+        .donacion-container {
+            max-width: 900px;
+            margin: 40px auto;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .donacion-imagen {
+            height: 300px;
+            background-image: url('https://images.unsplash.com/photo-1548199973-03cce0bbc87b?q=80&w=1200&auto=format&fit=crop'); /* Foto de perritos felices */
+            background-size: cover;
+            background-position: center;
+        }
+        .donacion-cuerpo {
+            padding: 40px;
+            display: flex;
+            gap: 40px;
+        }
+        .donacion-info {
+            flex: 1;
+        }
+        .barra-progreso-fondo {
+            background-color: #e2e8f0;
+            border-radius: 10px;
+            height: 12px;
+            width: 100%;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        .barra-progreso-lleno {
+            background-color: #0284c7; /* Azul tipo la foto */
+            height: 100%;
+            width: 50%; /* 50% completado */
+            border-radius: 10px;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .donacion-formulario {
+            flex: 1;
+            background: #f8fafc;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .tabs {
+            display: flex;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #0f172a;
+            margin-bottom: 20px;
+        }
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .tab.activa { background-color: #0f172a; color: white; }
+        .tab.inactiva { background-color: white; color: #0f172a; }
+        
+        .botones-cantidad {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .btn-cantidad {
+            flex: 1;
+            padding: 12px;
+            background: white;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            color: #475569;
+        }
+        .btn-cantidad:hover { border-color: #0f172a; color: #0f172a; }
+        
+        .input-grupo {
+            margin-bottom: 20px;
+        }
+        .input-banco {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box; /* Evita que se salga del borde */
+        }
+        .btn-siguiente {
+            width: 100%;
+            padding: 15px;
+            background-color: #0f172a; /* Azul oscuro como en tu referencia */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-siguiente:hover { background-color: #1e293b; }
+    </style>
+</head>
+<body class="fondo-patitas">
+
+    <header style="background-color: #FFC107; padding: 20px 60px; display: flex; justify-content: space-between; align-items: center;">
+        <a href="{{ url_for('index') }}" style="text-decoration: none;">
+            <div style="font-size: 24px; font-weight: bold; color: white;">🐾 Pet Mach</div>
+        </a>
+        <nav class="landing-nav">
+            <a href="{{ url_for('index') }}">Inicio</a>
+            <a href="{{ url_for('login') }}">Adoptar Mascota</a>
+            <a href="{{ url_for('donar') }}">Donar</a>
+            <a href="{{ url_for('historia') }}">Nuestra Historia</a>
+            <a href="{{ url_for('login') }}" class="btn-login-header">Login / Registro</a>
+        </nav>
+    </header>
+
+    <div class="donacion-container">
+        <div class="donacion-imagen"></div>
+        
+        <div class="donacion-cuerpo">
+            
+            <div class="donacion-info">
+                <h3 style="color: #333; margin-top: 0;">Ayuda a construir nuestro nuevo refugio</h3>
+                <p style="color: #666; line-height: 1.6; margin-bottom: 30px;">
+                    Tu aporte nos permite comprar alimento, medicinas y mejorar las instalaciones para los peluditos rescatados en Tabasco. ¡Cada peso cuenta!
+                </p>
+                
+                <div class="barra-progreso-fondo">
+                    <div class="barra-progreso-lleno"></div>
+                </div>
+                
+                <div class="stats">
+                    <div>
+                        <span style="color: #0284c7;">$10,172</span><br>
+                        <span style="font-size: 12px; color: #64748b; font-weight: normal;">RECAUDADO</span>
+                    </div>
+                    <div style="text-align: center;">
+                        <span>3670</span><br>
+                        <span style="font-size: 12px; color: #64748b; font-weight: normal;">DONACIONES</span>
+                    </div>
+                    <div style="text-align: right;">
+                        <span>$20,000</span><br>
+                        <span style="font-size: 12px; color: #64748b; font-weight: normal;">META</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="donacion-formulario">
+                <div class="tabs">
+                    <div class="tab inactiva">Una vez</div>
+                    <div class="tab activa">❤ Mensual</div>
+                </div>
+                
+                <div class="botones-cantidad">
+                    <button class="btn-cantidad">$ 100</button>
+                    <button class="btn-cantidad">$ 200</button>
+                    <button class="btn-cantidad">$ 300</button>
+                </div>
+                
+                <div class="input-grupo">
+                    <input type="number" class="input-banco" placeholder="$ Otra cantidad">
+                </div>
+                
+                <div class="input-grupo">
+                    <label style="font-size: 14px; color: #475569; font-weight: bold; margin-bottom: 8px; display: block;">Datos de Pago (CLABE o Tarjeta)</label>
+                    <input type="text" class="input-banco" placeholder="Ej. 1234 5678 9101 1121" maxlength="18" style="font-family: monospace; letter-spacing: 1px;">
+                </div>
+                
+                <button class="btn-siguiente">Siguiente</button>
+            </div>
+            
+        </div>
+    </div>
+
+</body>
+</html>

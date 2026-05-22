@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pet Mach - Adoptar</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="fondo-patitas">
+    <header class="barra-superior">
+        <a href="{{ url_for('dashboard') }}" style="text-decoration: none; color: white;">
+            <h1>🐾 Pet Mach</h1>
+        </a>
+        <nav>
+            <a href="{{ url_for('dashboard') }}">Adoptar</a>
+            <a href="{{ url_for('refugios') }}">Refugios</a>
+            <a href="{{ url_for('mensajes') }}">Mensajes</a>
+            <a href="{{ url_for('agregar_mascota') }}">Publicar peludito</a>
+            <a href="{{ url_for('perfil') }}">Mi perfil</a>
+        </nav>
+    </header>
+    <main class="contenido-principal">
+        <div class="busqueda">
+            <h2>Adoptar</h2>
+            <form action="{{ url_for('dashboard') }}" method="GET" style="display: flex; gap: 10px;">
+                <input type="text" name="q" placeholder="Buscar por nombre o raza..." value="{{ request.args.get('q', '') }}">
+                <button type="submit" class="btn-principal" style="width: auto; margin-top: 0; padding: 12px 20px;">Buscar</button>
+            </form>
+        </div>
+
+        <div class="grid-mascotas">
+            {% for mascota in mascotas %}
+            
+            <a href="{{ url_for('detalle_mascota', id_mascota=mascota._id) }}" style="text-decoration: none; color: inherit;">
+                <div class="tarjeta-mascota">
+                    <img src="{{ mascota.imagen }}" alt="{{ mascota.nombre }}">
+                    <h3>{{ mascota.nombre }}</h3>
+                    <p>{{ mascota.raza }}</p>
+                </div>
+            </a>
+            
+            {% endfor %}
+        </div>
+    </main>
+</body>
+</html>

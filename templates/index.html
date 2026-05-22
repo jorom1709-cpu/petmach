@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pet Mach - Adopta, No Compres</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="landing-body">
+    
+    <header class="landing-header">
+        <div class="landing-logo">🐾 Pet Mach</div>
+        <nav class="landing-nav">
+            <a href="#">Inicio</a>
+            <a href="{{ url_for('login') }}">Adoptar Mascota</a>
+            <a href="{{ url_for('donar') }}">Donar</a>
+            <a href="{{ url_for('historia') }}">Nuestra Historia</a>
+            <a href="{{ url_for('login') }}" class="btn-login-header">Login / Registro</a>
+        </nav>
+    </header>
+
+    <main class="landing-main">
+        
+        <div class="landing-text">
+            <h1>ADOPTA,<br>NO COMPRES</h1>
+            <p>Dale una segunda oportunidad a un peludito. Encuentra a tu mejor amigo y cambia su mundo para siempre con Pet Mach.</p>
+            
+            <div class="landing-buttons">
+                <a href="{{ url_for('login') }}" class="btn-rojo">Adoptar Ahora</a>
+                <a href="#" class="btn-outline" onclick="abrirModal(event)">Saber Más</a>
+            </div>
+        </div>
+
+        <div class="landing-image">
+            <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=1000&auto=format&fit=crop" alt="Perro Beagle">
+        </div>
+
+    </main>
+<div id="modal-saber-mas" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(5px);">
+        
+        <div style="background: white; padding: 40px; border-radius: 20px; max-width: 450px; width: 90%; text-align: center; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.3); font-family: Arial, sans-serif;">
+            
+            <span style="position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; color: #999; font-weight: bold;" onclick="cerrarModal()">&times;</span>
+            
+            <h2 style="color: #FF4B3A; margin-top: 0; font-weight: 900; font-size: 28px;">¿Cómo funciona?</h2>
+            <p style="color: #666; margin-bottom: 30px;">Adoptar nunca fue tan fácil. Sigue estos 3 pasos:</p>
+            
+            <div style="text-align: left; margin-top: 20px; color: #444; line-height: 1.6;">
+                <p style="margin-bottom: 15px;">
+                    <strong style="color: #FFC107; font-size: 20px;">1.</strong> <strong>Crea tu perfil:</strong> Regístrate en Pet Mach y cuéntanos tu estilo de vida.
+                </p>
+                <p style="margin-bottom: 15px;">
+                    <strong style="color: #FFC107; font-size: 20px;">2.</strong> <strong>Haz Match:</strong> Explora a los peluditos disponibles en los refugios de Villahermosa y todo Tabasco.
+                </p>
+                <p style="margin-bottom: 15px;">
+                    <strong style="color: #FFC107; font-size: 20px;">3.</strong> <strong>Adopta:</strong> ¡Manda un mensaje al refugio desde la app, agenda tu visita y cambia una vida!
+                </p>
+            </div>
+            
+            <a href="{{ url_for('login') }}" style="display: inline-block; margin-top: 25px; background: #FF4B3A; color: white; padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: bold; font-size: 16px; transition: transform 0.2s;">
+                ¡Quiero Empezar!
+            </a>
+            
+        </div>
+    </div>
+
+    <script>
+        function abrirModal(e) {
+            e.preventDefault(); // Evita que la página salte hacia arriba
+            document.getElementById('modal-saber-mas').style.display = 'flex';
+        }
+
+        function cerrarModal() {
+            document.getElementById('modal-saber-mas').style.display = 'none';
+        }
+
+        // Cierra el modal si el usuario da clic afuera de la caja blanca
+        window.onclick = function(event) {
+            var modal = document.getElementById('modal-saber-mas');
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>

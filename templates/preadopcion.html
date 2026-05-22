@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pre-Adopción - {{ mascota.nombre }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="fondo-patitas">
+    <header class="barra-superior">
+        <a href="{{ url_for('dashboard') }}" style="text-decoration: none; color: white;">
+            <h1>🐾 Pet Mach</h1>
+        </a>
+        <nav>
+            <a href="{{ url_for('dashboard') }}">Adoptar</a>
+            <a href="{{ url_for('refugios') }}">Refugios</a>
+            <a href="{{ url_for('mensajes') }}">Mensajes</a>
+            <a href="{{ url_for('perfil') }}">Mi perfil</a>
+        </nav>
+    </header>
+    <main class="contenido-principal">
+        <a href="{{ url_for('detalle_mascota', id_mascota=mascota._id) }}" style="color: #ff6b6b; text-decoration: none; font-weight: bold; margin-bottom: 20px; display: inline-block;">
+            &larr; Regresar al perfil de {{ mascota.nombre }}
+        </a>
+
+        <div class="form-container">
+            <h2>Formulario de Pre-Adopción</h2>
+            <p>Estás a un paso de darle un hogar a <strong>{{ mascota.nombre }}</strong>. Llena tus datos para que el refugio te contacte.</p>
+            
+            <form action="{{ url_for('preadopcion', id_mascota=mascota._id) }}" method="POST" class="formulario-mascota">
+                <label>Tu nombre completo:</label>
+                <input type="text" name="nombre" placeholder="Ej. Yael Leonardo..." required>
+                
+                <label>Teléfono de contacto:</label>
+                <input type="tel" name="telefono" placeholder="Ej. 993..." required>
+                
+                <label>¿Por qué quieres adoptar a {{ mascota.nombre }}?</label>
+                <input type="text" name="motivo" placeholder="Cuéntanos un poco sobre ti y tu hogar..." required style="height: 80px;">
+                
+                <button type="submit" class="btn-principal">Enviar Solicitud</button>
+            </form>
+        </div>
+    </main>
+</body>
+</html>
