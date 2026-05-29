@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pet Mach - Panel de Administrador</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body style="background-color: #f4f7f6; font-family: Arial, sans-serif; margin: 0; padding: 0;">
+    
+    <header style="background-color: #2c3e50; padding: 20px 40px; color: white; display: flex; justify-content: space-between; align-items: center;">
+        <h1 style="margin: 0; font-size: 24px;">👑 Panel de Administrador</h1>
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <a href="{{ url_for('mensajes') }}" style="color: white; text-decoration: none; margin-right: 15px; font-weight: bold;">💬 Mensajes y Soporte</a>
+            <span style="font-weight: bold;">Admin Pet Mach</span>
+            <a href="{{ url_for('logout') }}" style="background: #dc3545; color: white; padding: 8px 15px; border-radius: 5px; text-decoration: none; font-weight: bold;">Cerrar Sesión</a>
+        </div>
+    </header>
+
+    <main style="max-width: 1000px; margin: 40px auto; padding: 0 20px;">
+        
+        <h2 style="margin-bottom: 20px; color: #333;">👤 Usuarios Pendientes de Verificación (WhatsApp)</h2>
+
+        {% if pendientes %}
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+                {% for usuario in pendientes %}
+                    <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-top: 5px solid #0284c7;">
+                        <h3 style="margin-top: 0; color: #333; margin-bottom: 5px;">{{ usuario.nombre }}</h3>
+                        <p style="margin: 5px 0; color: #555;"><strong>Correo:</strong> {{ usuario.correo }}</p>
+                        <p style="margin: 5px 0; color: #555;"><strong>Teléfono:</strong> {{ usuario.telefono }}</p>
+                        <p style="margin: 5px 0; color: #555;"><strong>Edad:</strong> {{ usuario.edad }} años</p>
+                        
+                        <div style="display: flex; gap: 10px; margin-top: 20px;">
+                            <form action="{{ url_for('aprobar_usuario', id_usuario=usuario._id) }}" method="POST" style="flex: 1;">
+                                <button type="submit" style="background: #28a745; color: white; border: none; padding: 10px; border-radius: 8px; width: 100%; cursor: pointer; font-weight: bold;">✅ Aprobar</button>
+                            </form>
+                            <form action="{{ url_for('rechazar_usuario', id_usuario=usuario._id) }}" method="POST" style="flex: 1;">
+                                <button type="submit" style="background: #dc3545; color: white; border: none; padding: 10px; border-radius: 8px; width: 100%; cursor: pointer; font-weight: bold;">❌ Rechazar</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div style="text-align: center; padding: 30px; background: white; border-radius: 12px; border: 1px dashed #ccc;">
+                <p style="color: #777; margin: 0;">No hay usuarios pendientes de verificar.</p>
+            </div>
+        {% endif %}
+
+        <hr style="margin: 50px 0; border: 1px solid #ddd;">
+        <h2 style="margin-bottom: 20px; color: #333;">🐾 Publicaciones de Mascotas Pendientes</h2>
+
+        {% if mascotas_pendientes %}
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+                {% for mascota in mascotas_pendientes %}
+                    <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; flex-direction: column;">
+                        <img src="{{ mascota.imagen }}" alt="{{ mascota.nombre }}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 15px;">
+                        <h3 style="margin-top: 0; color: #333;">{{ mascota.nombre }}</h3>
+                        <p style="margin: 5px 0; color: #555;"><strong>Raza:</strong> {{ mascota.raza }}</p>
+                        <p style="margin: 5px 0; color: #555;"><strong>Refugio:</strong> {{ mascota.refugio }}</p>
+                        <p style="font-size: 0.9em; color: #666; margin: 10px 0; flex-grow: 1;">{{ mascota.descripcion }}</p>
+                        
+                        <div style="display: flex; gap: 10px; margin-top: 15px;">
+                            <form action="{{ url_for('aprobar_mascota', id_mascota=mascota._id) }}" method="POST" style="flex: 1;">
+                                <button type="submit" style="background: #28a745; color: white; border: none; padding: 10px; border-radius: 8px; width: 100%; cursor: pointer; font-weight: bold;">✅ Aprobar</button>
+                            </form>
+                            <form action="{{ url_for('rechazar_mascota', id_mascota=mascota._id) }}" method="POST" style="flex: 1;" onsubmit="return confirm('¿Seguro que quieres borrar esta publicación de la base de datos?');">
+                                <button type="submit" style="background: #dc3545; color: white; border: none; padding: 10px; border-radius: 8px; width: 100%; cursor: pointer; font-weight: bold;">❌ Rechazar</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div style="text-align: center; padding: 40px; background: white; border-radius: 12px; border: 1px dashed #ccc;">
+                <p style="color: #777; margin: 0;">No hay publicaciones pendientes de revisión.</p>
+            </div>
+        {% endif %}
+
+    </main>
+</body>
+</html>

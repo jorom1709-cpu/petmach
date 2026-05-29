@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pet Mach - Nuestra Historia</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="fondo-patitas">
+
+    <header style="background-color: #FFC107; padding: 20px 60px; display: flex; justify-content: space-between; align-items: center;">
+        <a href="{{ url_for('index') }}" style="text-decoration: none;">
+            <div style="font-size: 24px; font-weight: bold; color: white;">🐾 Pet Mach</div>
+        </a>
+        <nav class="landing-nav">
+            <a href="{{ url_for('index') }}">Inicio</a>
+            <a href="{{ url_for('login') }}">Adoptar Mascota</a>
+            <a href="{{ url_for('historia') }}">Nuestra Historia</a>
+            <a href="{{ url_for('login') }}" class="btn-login-header">Login / Registro</a>
+        </nav>
+    </header>
+
+    <main style="max-width: 800px; margin: 60px auto; background-color: white; padding: 60px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+        <h2 style="color: #FF4B3A; font-size: 38px; margin-top: 0; margin-bottom: 20px; font-weight: 900; text-align: center;">NUESTRA HISTORIA</h2>
+        
+        <div style="color: #555; font-size: 18px; line-height: 1.8;">
+            <p style="margin-bottom: 20px;">
+                Todo comenzó con una observación que nos rompió el corazón: caminar por las calles de Villahermosa y ver a tantos peluditos sin hogar, mientras los refugios locales hacían un esfuerzo sobrehumano, trabajando al límite de su capacidad.
+            </p>
+            <p style="margin-bottom: 20px;">
+                Nos dimos cuenta de que muchas familias querían brindar amor, pero a veces no sabían dónde buscar o el proceso era complicado. Así nació <strong>Pet Mach</strong>. Decidimos usar la tecnología para construir un puente de esperanza seguro, rápido y directo entre esos refugios y los corazones dispuestos a dar una segunda oportunidad.
+            </p>
+            <p style="font-weight: bold; color: #333; font-size: 22px; margin-top: 40px; text-align: center; border-top: 2px dashed #eee; padding-top: 30px;">
+                No podemos cambiar el mundo entero, pero al adoptar, le cambias el mundo entero a un animalito. <br>
+                <span style="color: #FF4B3A;">¡Adopta, no compres!</span>
+            </p>
+        </div>
+    </main>
+
+    <footer style="background-color: #333; color: white; text-align: center; padding: 30px; font-size: 14px; margin-top: 40px;">
+        <p>🐾 Pet Mach &copy; 2026. Proyecto desarrollado para conectar corazones.</p>
+        <p style="color: #999; margin-top: 5px;">Villahermosa, Tabasco.</p>
+    </footer>
+
+</body>
+</html>

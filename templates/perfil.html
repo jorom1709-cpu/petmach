@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pet Mach - Mi Perfil</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="fondo-patitas">
+    <header class="barra-superior">
+        <a href="{{ url_for('dashboard') }}" style="text-decoration: none; color: white;">
+            <h1>🐾 Pet Mach</h1>
+        </a>
+        <nav>
+            <a href="{{ url_for('dashboard') }}">Adoptar</a>
+            <a href="{{ url_for('refugios') }}">Refugios</a>
+            <a href="{{ url_for('mensajes') }}">Mensajes</a>
+            <a href="{{ url_for('perfil') }}">Mi perfil</a>
+        </nav>
+    </header>
+
+    <main class="contenido-principal">
+        <div class="perfil-container" style="max-width: 600px;">
+            
+            <div class="perfil-header">
+                <img src="{{ usuario.foto if usuario.foto else 'https://cdn-icons-png.flaticon.com/512/194/194279.png' }}" alt="Foto de perfil">
+                <h2>{{ usuario.nombre }}</h2>
+                <p>{{ usuario.correo }}</p>
+            </div>
+
+            <div class="perfil-editar">
+                <h3>Editar mi información</h3>
+                <form action="{{ url_for('perfil') }}" method="POST" class="formulario-mascota" enctype="multipart/form-data">
+                    <label>Mi Nombre:</label>
+                    <input type="text" name="nombre" value="{{ usuario.nombre }}" required>
+                    
+                    <label>Actualizar foto de perfil:</label>
+                    <input type="file" name="foto" accept="image/*" style="padding: 10px 0;">
+                    
+                    <button type="submit" class="btn-principal">Guardar Cambios</button>
+                </form>
+            </div>
+
+            <div class="perfil-editar" style="margin-top: 20px;">
+                <h3 style="color: #a8e6cf; margin-bottom: 15px;">📋 Formularios de PreAdopción</h3>
+                
+                {% if solicitudes|length > 0 %}
+                    {% for sol in solicitudes %}
+                    <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 5px solid #a8e6cf;">
+                        <p style="margin-bottom: 5px;"><strong>Mascota solicitada:</strong> {{ sol.nombre_mascota }}</p>
+                        <p style="margin-bottom: 5px;"><strong>Adoptante:</strong> {{ sol.nombre_adoptante }}</p>
+                        <p style="margin-bottom: 5px;"><strong>Teléfono:</strong> {{ sol.telefono }}</p>
+                        <p style="font-style: italic; color: #666; margin-top: 10px;">"{{ sol.motivo }}"</p>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p style="color: #777;">Aún no hay formularios de adopción registrados.</p>
+                {% endif %}
+            </div>
+
+            <div class="botones-perfil">
+                <a href="{{ url_for('agregar_mascota') }}" class="btn-perfil btn-azul">
+                    🐾 Publicar peludito
+                </a>
+                
+                <a href="{{ url_for('logout') }}" class="btn-perfil btn-naranja">
+                    🚪 Cerrar sesión
+                </a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

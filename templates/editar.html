@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar - {{ mascota.nombre }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="barra-superior">
+        <a href="{{ url_for('dashboard') }}" style="text-decoration: none; color: white;"><h1>🐾 Pet Mach</h1></a>
+    </header>
+
+    <main class="contenido-principal">
+        <div class="form-container">
+            <h2>Editar Publicación</h2>
+            
+            <form action="{{ url_for('editar_mascota', id=mascota._id) }}" method="POST" class="formulario-mascota" enctype="multipart/form-data">
+                <label>Apodo o referencia:</label>
+                <input type="text" name="nombre" value="{{ mascota.nombre }}" required>
+                
+                <label>Raza o Categoría:</label>
+                <input type="text" name="raza" value="{{ mascota.raza }}" required>
+                
+                <label>Refugio al que pertenece:</label>
+                <select name="refugio" required style="padding: 10px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 8px;">
+                    {% for refugio in refugios %}
+                        <option value="{{ refugio.nombre }}" {% if mascota.refugio == refugio.nombre %}selected{% endif %}>{{ refugio.nombre }}</option>
+                    {% endfor %}
+                </select>
+                
+                <label>Descripción y personalidad:</label>
+                <textarea name="descripcion" required style="padding: 10px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 8px; min-height: 80px;">{{ mascota.descripcion }}</textarea>
+                
+                <label>Cambiar fotografía (Opcional):</label>
+                <input type="file" name="foto" accept="image/*" style="padding: 10px 0; margin-bottom: 20px;">
+                
+                <button type="submit" class="btn-principal" style="background-color: #f39c12;">Guardar Cambios</button>
+                
+                <a href="{{ url_for('detalle_mascota', id_mascota=mascota._id) }}" style="display: block; text-align: center; margin-top: 15px; color: #777; text-decoration: none;">Cancelar</a>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

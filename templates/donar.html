@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pet Mach - Donar</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .donar-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            max-width: 500px;
+            margin: 40px auto;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box; /* Importante para que no se salga del contenedor */
+        }
+        .btn-donar {
+            width: 100%;
+            padding: 15px;
+            background-color: #0284c7;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body class="fondo-patitas">
+    <header class="barra-superior">
+        <a href="{{ url_for('dashboard') }}" style="text-decoration: none; color: white;"><h1>🐾 Pet Mach</h1></a>
+    </header>
+
+    <main class="contenido-principal">
+        <div class="donar-container">
+            <h2 style="text-align: center; color: #333;">Ayuda a los refugios</h2>
+            <p style="text-align: center; color: #666; font-size: 14px; margin-bottom: 25px;">
+                Tu aporte permite comprar alimento, medicinas y mejorar instalaciones.
+            </p>
+            
+            <form action="{{ url_for('donar') }}" method="POST">
+                <div class="form-group">
+                    <label>Frecuencia:</label>
+                    <div style="display: flex; gap: 10px;">
+                        <label style="flex: 1; border: 1px solid #ccc; padding: 10px; text-align: center; border-radius: 8px; cursor: pointer;">
+                            <input type="radio" name="frecuencia" value="unica" checked> Una vez
+                        </label>
+                        <label style="flex: 1; border: 1px solid #ccc; padding: 10px; text-align: center; border-radius: 8px; cursor: pointer;">
+                            <input type="radio" name="frecuencia" value="mensual"> Mensual
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Selecciona el refugio:</label>
+                    <select name="refugio_destino" required class="form-control">
+                        <option value="" disabled selected>Elige un refugio...</option>
+                        {% for refugio in refugios %}
+                            <option value="{{ refugio.nombre }}">{{ refugio.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>CLABE o Tarjeta:</label>
+                    <input type="text" name="cuenta_origen" placeholder="Ej. 1234 5678 9101 1121" required class="form-control">
+                </div>
+
+                <button type="submit" class="btn-donar">Confirmar Donación</button>
+            </form>
+        </div>
+    </main>
+
+    {% if exito %}
+    <script>
+        Swal.fire({
+            title: '¡Donación recibida!',
+            text: 'Gracias por tu apoyo. Tu donación ha sido enviada al refugio seleccionado.',
+            icon: 'success',
+            confirmButtonColor: '#0284c7'
+        });
+    </script>
+    {% endif %}
+</body>
+</html>

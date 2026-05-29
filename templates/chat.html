@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat - {{ solicitud.nombre_mascota }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="fondo-patitas">
+    <header class="barra-superior">
+        <a href="{{ url_for('dashboard') }}" style="text-decoration: none; color: white;"><h1>🐾 Pet Mach</h1></a>
+    </header>
+
+    <main class="contenido-principal">
+        {% if session['tipo_cuenta'] == 'refugio' %}
+            <a href="{{ url_for('panel_refugio') }}" style="color: #ff6b6b; text-decoration: none; font-weight: bold; margin-bottom: 20px; display: inline-block;">
+                &larr; Volver a mi Panel
+            </a>
+        {% else %}
+            <a href="{{ url_for('mensajes') }}" style="color: #ff6b6b; text-decoration: none; font-weight: bold; margin-bottom: 20px; display: inline-block;">
+                &larr; Volver a Mis Mensajes
+            </a>
+        {% endif %}
+
+        <div class="chat-container">
+            <div class="chat-header" style="{% if tipo == 'sistema' %}background: #a8d5e2; color: #333;{% endif %}">
+                <h2>{% if tipo == 'sistema' %}Soporte Pet Mach{% else %}Chat: {{ solicitud.refugio }}{% endif %}</h2>
+                <p style="font-size: 14px; margin-top: 5px;">Asunto: Adopción de {{ solicitud.nombre_mascota }}</p>
+            </div>
+            
+            <div class="chat-messages" id="caja-mensajes">
+                {% for msg in mensajes %}
+                    {% set es_mio = (msg.remitente == usuario.nombre) or (session['tipo_cuenta'] == 'admin' and msg.remitente == 'Sistema Pet Mach') %}
+                    
+                    <div class="burbuja {% if es_mio %}mia{% else %}otra{% endif %}" {% if msg.remitente == 'Sistema Bot 🤖' %}style="border-left: 4px solid #f1c40f;"{% endif %}>
+                        <strong style="font-size: 12px; color: #555; display: block; margin-bottom: 3px;">{{ msg.remitente }}</strong>
+                        
+                        {% if msg.mensaje %}
+                            <p style="margin: 0;">{{ msg.mensaje }}</p>
+                        {% endif %}
+                        
+                        {% if msg.archivo_url %}
+                            <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(0,0,0,0.1);">
+                                {% if msg.archivo_nombre.lower().endswith('.png') or msg.archivo_nombre.lower().endswith('.jpg') or msg.archivo_nombre.lower().endswith('.jpeg') %}
+                                    <a href="{{ msg.archivo_url }}" target="_blank">
+                                        <img src="{{ msg.archivo_url }}" alt="Archivo" style="max-width: 150px; border-radius: 8px; display: block; margin-bottom: 5px;">
+                                    </a>
+                                {% endif %}
+                                <a href="{{ msg.archivo_url }}" download="{{ msg.archivo_nombre }}" style="display: inline-block; background: rgba(0,0,0,0.05); padding: 5px 10px; border-radius: 12px; text-decoration: none; color: inherit; font-size: 11px; font-weight: bold;">
+                                    📎 Descargar {{ msg.archivo_nombre }}
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <p style="text-align: center; color: #999; margin-top: 20px;">No hay mensajes en esta sala aún.</p>
+                {% endfor %}
+            </div>
+
+            <form action="{{ url_for('chat', id_solicitud=solicitud._id, tipo=tipo) }}" method="POST" enctype="multipart/form-data" class="chat-input" style="display: flex; align-items: center; gap: 10px; padding: 10px;">
+                {% if session['tipo_cuenta'] != 'adoptante' %}
+                    <input type="hidden" name="es_manual" value="true">
+                {% endif %}
+                
+                <label style="cursor: pointer; background: #f1f5f9; padding: 10px; border-radius: 50%; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; flex-shrink: 0;" title="Adjuntar archivo">
+                    📎
+                    <input type="file" name="archivo" accept="image/*,.pdf" style="display: none;" onchange="document.getElementById('nombre-archivo').innerText = this.files[0].name">
+                </label>
+                
+                <div style="flex: 1; display: flex; flex-direction: column;">
+                    <small id="nombre-archivo" style="color: #0284c7; font-size: 11px; font-weight: bold; margin-bottom: 2px;"></small>
+                    <input type="text" name="mensaje" placeholder="Escribe un mensaje..." autocomplete="off" autofocus style="width: 100%; border: none; outline: none; background: transparent; padding: 5px;">
+                </div>
+                
+                <button type="submit" style="{% if tipo == 'sistema' %}background: #a8d5e2; color: #333;{% endif %} flex-shrink: 0;">Enviar</button>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        const cajaMensajes = document.getElementById('caja-mensajes');
+        if (cajaMensajes) {
+            cajaMensajes.scrollTop = cajaMensajes.scrollHeight;
+        }
+    </script>
+</body>
+</html>

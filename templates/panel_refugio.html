@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pet Match - Panel de Refugio</title>
+</head>
+<body style="background-color: #f4f7f6; font-family: Arial, sans-serif; margin: 0; padding: 0;">
+    <header style="background-color: #2c3e50; padding: 20px 40px; color: white; display: flex; justify-content: space-between; align-items: center;">
+        <h1 style="margin: 0; font-size: 24px;">🏢 Panel de Refugio</h1>
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <span style="font-weight: bold;">Hola, {{ session.get('nombre', 'Refugio') }}</span>
+            <a href="{{ url_for('logout') }}" style="background: #dc3545; color: white; padding: 8px 15px; border-radius: 5px; text-decoration: none; font-weight: bold;">Cerrar Sesión</a>
+        </div>
+    </header>
+
+    <main style="max-width: 1000px; margin: 40px auto; padding: 0 20px;">
+        <h2 style="margin-bottom: 30px; color: #333;">Solicitudes recibidas</h2>
+
+        {% if solicitudes %}
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px;">
+            {% for solicitud in solicitudes %}
+            <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-top: 5px solid #FFC107; display: flex; flex-direction: column;">
+                <h3 style="margin-top: 0; color: #333;">🐾 {{ solicitud.nombre_mascota }}</h3>
+                <p style="margin: 5px 0; color: #555;"><strong>Adoptante:</strong> {{ solicitud.nombre_adoptante }}</p>
+                <p style="margin: 5px 0; color: #555;"><strong>Tel:</strong> {{ solicitud.telefono }}</p>
+                
+                <div style="background: #f8f9fa; padding: 12px; border-radius: 8px; font-size: 0.9em; color: #666; margin: 15px 0; flex-grow: 1;">
+                    <strong>Motivo de adopción:</strong><br>
+                    <em>"{{ solicitud.motivo }}"</em>
+                </div>
+                
+                <div style="margin-top: auto;">
+                    <a href="{{ url_for('chat', id_solicitud=solicitud._id, tipo='refugio') }}" 
+                       style="background: #0284c7; color: white; text-align: center; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; display: block; width: 100%; box-sizing: border-box;">
+                        💬 Abrir Chat y Contestar
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+            <div style="text-align: center; padding: 50px; background: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                <h3 style="color: #666;">Bandeja vacía</h3>
+                <p style="color: #999;">No hay solicitudes pendientes por el momento.</p>
+            </div>
+        {% endif %}
+    </main>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pet Mach - Mensajes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="fondo-patitas">
+    <header class="barra-superior">
+        <a href="{{ url_for('dashboard') }}" style="text-decoration: none; color: white;"><h1>🐾 Pet Mach</h1></a>
+        <nav>
+            <a href="{{ url_for('dashboard') }}">Adoptar</a>
+            <a href="{{ url_for('refugios') }}">Refugios</a>
+            <a href="{{ url_for('mensajes') }}">Mensajes</a>
+            <a href="{{ url_for('perfil') }}">Mi perfil</a>
+        </nav>
+    </header>
+
+    <main class="contenido-principal">
+        <div class="busqueda">
+            <h2>Centro de mensajes</h2>
+            <p>Revisa tus notificaciones y platica con los refugios.</p>
+        </div>
+
+        <div class="lista-mensajes">
+            {% if chats|length > 0 %}
+                {% for chat in chats %}
+                
+                <div style="position: relative;">
+                    <form id="form-eliminar-sis-{{ chat._id }}" action="{{ url_for('eliminar_chat_sistema', id_solicitud=chat._id) }}" method="POST" 
+                          style="position: absolute; top: 10px; right: 10px; z-index: 10;">
+                        <button type="button" class="btn-eliminar-sis" data-id="{{ chat._id }}" 
+                                style="background: #e1f5fe; border: 1px solid #b3e5fc; color: #0284c7; cursor: pointer; border-radius: 50%; width: 28px; height: 28px; font-weight: bold; font-size: 16px; display: flex; align-items: center; justify-content: center;">
+                            ×
+                        </button>
+                    </form>
+
+                    <a href="{{ url_for('chat', id_solicitud=chat._id, tipo='sistema') }}" style="text-decoration: none; color: inherit; display: block;">
+                        <div class="mensaje-card" style="border-left: 5px solid #a8d5e2; margin-bottom: 10px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                            <div style="display: flex; align-items: center;">
+                                <img src="https://cdn-icons-png.flaticon.com/512/4712/4712010.png" alt="Soporte" style="width: 50px; margin-right: 15px;">
+                                <div class="mensaje-info">
+                                    <h4 style="margin: 0;">Soporte Pet Mach</h4>
+                                    <p style="margin: 5px 0;">Asistencia en línea para: <strong>{{ chat.nombre_adoptante }}</strong></p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div style="position: relative;">
+                    <form id="form-eliminar-{{ chat._id }}" action="{{ url_for('eliminar_chat', id_solicitud=chat._id) }}" method="POST" 
+                          style="position: absolute; top: 10px; right: 10px; z-index: 10;">
+                        <button type="button" class="btn-eliminar" data-id="{{ chat._id }}" data-mascota="{{ chat.nombre_mascota }}" 
+                                style="background: #fff0f0; border: 1px solid #ffcccc; color: #ff6b6b; cursor: pointer; border-radius: 50%; width: 28px; height: 28px; font-weight: bold; font-size: 16px; display: flex; align-items: center; justify-content: center;">
+                            ×
+                        </button>
+                    </form>
+
+                    <a href="{{ url_for('chat', id_solicitud=chat._id, tipo='refugio') }}" style="text-decoration: none; color: inherit; display: block;">
+                        <div class="mensaje-card" style="border-left: 5px solid #ff6b6b; margin-bottom: 30px;">
+                            <img src="https://cdn-icons-png.flaticon.com/512/2809/2809802.png" alt="Refugio">
+                            <div class="mensaje-info">
+                                <h4>{{ chat.refugio }}</h4>
+                                <p>Chat activo sobre adopción de: <strong>{{ chat.nombre_mascota }}</strong></p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                {% endfor %}
+            {% else %}
+                <div style="text-align: center; padding: 40px; color: #777;">
+                    <p>Aún no has iniciado ningún trámite de adopción.</p>
+                </div>
+            {% endif %}
+        </div>
+    </main>
+
+    <script>
+        document.querySelectorAll('.btn-eliminar').forEach(function(button) {
+            button.addEventListener('click', function() {
+                const idSolicitud = this.getAttribute('data-id');
+                const nombreMascota = this.getAttribute('data-mascota');
+                const idFormulario = 'form-eliminar-' + idSolicitud;
+
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: `Al eliminar la solicitud de ${nombreMascota}, se borrará todo el historial completo.`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#ff6b6b', 
+                    cancelButtonColor: '#777',    
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById(idFormulario).submit();
+                    }
+                });
+            });
+        });
+
+        document.querySelectorAll('.btn-eliminar-sis').forEach(function(button) {
+            button.addEventListener('click', function() {
+                const idSolicitud = this.getAttribute('data-id');
+                const idFormulario = 'form-eliminar-sis-' + idSolicitud;
+
+                Swal.fire({
+                    title: '¿Limpiar chat de soporte?',
+                    text: `Se borrarán los mensajes de asistencia de Pet Mach. Tu chat con el refugio se mantendrá a salvo.`,
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#0284c7', 
+                    cancelButtonColor: '#777',
+                    confirmButtonText: 'Sí, limpiar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById(idFormulario).submit();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
