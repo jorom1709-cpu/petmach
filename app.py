@@ -16,7 +16,7 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 # Conexión a la base de datos MongoDB
 MONGO_URI = os.environ.get("MONGO_URI")
 client = MongoClient(MONGO_URI)
-db = client['pet_mach_db']
+db = client['pet_match_db']
 coleccion_mascotas = db['mascotas']
 coleccion_usuarios = db['usuarios']
 coleccion_refugios = db['refugios'] 
